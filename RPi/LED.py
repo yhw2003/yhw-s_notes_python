@@ -18,19 +18,29 @@ class LED:
 
 
 
-async def main(LEDpin):
+async def LEDtest(LEDpin):
     newLED = LED(LEDpin)
     newLED.turnON()
-    await sleep(1)
+    await asyncio.sleep(1)
     newLED.turnOFF()
-    await sleep(1)
+
+
+async def main():
+    t1 = asyncio.create_task(LEDtest(17))
+    t2 = asyncio.create_task(LEDtest(18))
+    await asyncio.gather(t1,t2)
 
 
 
-tasks = [main(17),main(18)]
-asyncio.run(tasks)
+asyncio.run(main())
+#tasks = [LEDtest(17),LEDtest(18)]
+
+#for task in tasks:
+#    asyncio.run(task)
 #sleep(0.2)
 #asyncio.run(main(18))
+
+
 
 
 GPIO.cleanup()
