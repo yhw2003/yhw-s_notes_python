@@ -19,14 +19,14 @@ class screen:
         GPIO.output(Epin,GPIO.LOW)
         for _pin in DATApins:
             GPIO.setup(_pin,GPIO.OUT)
-
+        self.init()
     def write(self,mode,DATA):
-        GPIO.OUT(self.RWpin,GPIO.LOW)
+        GPIO.output(self.RWpin,GPIO.LOW)
         if mode == wDATA:
             GPIO.output(self.RSpin,GPIO.LOW)
         if mode == wCMD:
             GPIO.output(self.RSpin,GPIO.HIGH)
-        for tpin in self.DATApins():
+        for tpin in self.DATApins:
             GPIO.output(tpin,GPIO.LOW)
         if DATA&0x10==0x10:
             GPIO.output(self.DATApins[0],GPIO.HIGH)
@@ -35,7 +35,7 @@ class screen:
         if DATA&0x40==0x40:
             GPIO.output(self.DATApins[2],GPIO.HIGH)
         if DATA&0x80==0x80:
-            GPIO.output(self.DATApin[[3],GPIO.HIGH)
+            GPIO.output(self.DATApin[3],GPIO.HIGH)
         
         self.refresh()
         if DATA&0x01==0x01:
@@ -50,13 +50,24 @@ class screen:
 
 
     def init(self):
+        self.write(wCMD,0x33)
+        self.write(wCMD,0x32)
+        self.write(wCMD,0x06)
+        self.write(wCMD,0x0C)
+        self.write(wCMD,0x28)
+
+
+
+    def clear(self):
+        self.write(wCMD,0x01)
+
 
 
     def refresh(self):
         sleep(0.001)
-        GPIO.output(Epin,GPIO.HIGH)
+        GPIO.output(self.Epin,GPIO.HIGH)
         sleep(0.001)
-        GPIO.output(Epin,GPIO.LOW)
+        GPIO.output(self.Epin,GPIO.LOW)
 
 
 if __name__ == "__main__":
